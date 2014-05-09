@@ -1,6 +1,5 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
 #
 # Puppet environment for Master/Agent testing
 #
