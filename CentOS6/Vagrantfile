@@ -1,0 +1,35 @@
+#
+# Puppet environment for Master/Agent testing
+#
+require 'vagrant-hosts'
+
+DOMAIN="example.com"
+SUBNET="192.168.33"
+
+Vagrant.configure("2") do |config|
+
+  # Set up our environment
+  config.vm.provision :shell, :path => "provision-centos.sh"
+
+  # Performance gain
+  #config.vm.synced_folder ".", "/vagrant", :nfs => true
+
+  # Puppet master
+  config.vm.define :master do |master|
+    master.vm.box = "centos64"
+    master.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-fusion503-nocm.box"
+    master.vm.hostname = "puppet.#{DOMAIN}"
+    master.vm.network :private_network, ip: "#{SUBNET}.10"
+    master.vm.network :forwarded_port, guest: 80, host: 8080
+  end
+
+  # Puppet node
+  config.vm.define :node do |node|
+    node.vm.box = "centos64"
+    node.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-fusion503-nocm.box"
+    node.vm.hostname = "node.#{DOMAIN}"
+    node.vm.network :private_network, ip: "#{SUBNET}.11"
+    node.vm.network :forwarded_port, guest: 81, host: 9090
+  end
+
+end

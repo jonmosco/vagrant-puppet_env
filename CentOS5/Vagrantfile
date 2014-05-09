@@ -1,0 +1,18 @@
+# Hiera Learning VM
+#
+Vagrant.configure("2") do |config|
+
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file = "site.pp"
+    puppet.module_path = "puppet/modules"
+  end
+
+  config.vm.define :single do |single|
+    single.vm.box = "centos5"
+    single.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-59-x64-vbox4210.box"
+    single.vm.hostname = "single.example.com"
+    #single.vm.network "forwarded_port", guest: 80, host: 8080
+  end
+
+end

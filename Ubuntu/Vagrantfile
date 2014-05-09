@@ -1,0 +1,34 @@
+#
+# Puppet environment for Master/Agent testing
+#
+DOMAIN="example1.com"
+SUBNET="192.168.35"
+
+Vagrant.configure("2") do |config|
+
+  # Set up our environment
+  config.vm.provision :shell, :path => "provision-ubuntu.sh"
+
+  # Performance gain
+  #config.vm.synced_folder ".", "/vagrant", :nfs => true
+
+  # Puppet master
+  config.vm.define :master do |master|
+    master.vm.box = "puppet_ubuntu_12_04"
+    #master.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-fusion503.box"
+    master.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210.box"
+    master.vm.hostname = "puppet.#{DOMAIN}"
+    master.vm.network :private_network, ip: "#{SUBNET}.30"
+    master.vm.network :forwarded_port, guest: 80, host: 8081
+  end
+
+  # Puppet node
+  config.vm.define :node do |node|
+    node.vm.box = "puppet_ubuntu_12_04"
+    node.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210.box"
+    node.vm.hostname = "node.#{DOMAIN}"
+    node.vm.network :private_network, ip: "#{SUBNET}.31"
+    node.vm.network :forwarded_port, guest: 80, host: 9091
+  end
+
+end
