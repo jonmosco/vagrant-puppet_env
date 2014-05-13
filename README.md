@@ -1,7 +1,7 @@
 ## Multiple Vagrant Environments for Puppet Module development and testing
 
 This will not utilize the normal puppet vagrant provisioner.  This will
-install the latest puppet release and build an Master and an Agent for
+install the latest puppet release and build a Master and an Agent for
 testing in production-like environments.
 
 The following environments are available:
@@ -15,3 +15,9 @@ The following environments are available:
 The multi environment allows for n number of agents to be build with the
 INSTANCES=n variable.  NOTE: This will be limited to the amount of RAM so
 be cautious building a lot of nodes.
+
+
+## Requirements
+The following plugins are suggested, especially if using the Multi setup:
+
+* vagrant-hosts
