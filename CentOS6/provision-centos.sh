@@ -20,7 +20,7 @@ ${SUBNET}.11 node.${DOMAIN} node"
 
 SITE=`cat <<-END
 node default {
-  include profile::base
+  include profiles::base
 }
 END
 `
@@ -40,7 +40,7 @@ case $NAME in
     echo "Installing Puppet Master.."
     rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-7.noarch.rpm \
       > /dev/null 2>&1
-    yum install puppet-server git -y > /dev/null 2>&1
+    yum install puppet-server-3.4.3 git -y > /dev/null 2>&1
     echo "Done"
     echo "Building site manifest"
     echo "$SITE" >> /etc/puppet/manifests/site.pp
