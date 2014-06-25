@@ -24,6 +24,23 @@ node default {
 }
 END
 `
+BASE=`cat <<-END
+class profiles::base {
+}
+END
+`
+
+HIERA=`cat <<-END
+---
+:backends:
+  - yaml
+  :yaml:
+    :datadir: /etc/puppet/hieradata
+    :hierarchy:
+      - "node/%{::fqdn}"
+      - common
+END
+`
 
 # Get our hostname
 NAME=$( hostname -s )
@@ -52,6 +69,27 @@ case $NAME in
     if [ $master -eq 0 ]; then
       echo "Done"
     fi
+    echo "Setting up basic Puppet Master configuration"
+    sleep 1
+    echo "."
+    sleep 1
+    echo ".."
+    sleep 1
+    echo "..."
+    sleep 1
+    echo "...."
+    sleep 1
+    echo "....."
+    mkdir -p /etc/puppet/hieradata/node
+    mkdir -p /etc/puppet/modules/profiles/manifests
+    echo "$BASE" >> /etc/puppet/modules/profiles/manifests/base.pp
+    if [ -e /etc/hiera.yaml ]; then
+      rm /etc/hiera.yaml
+      echo "$HIERA" >> /etc/puppet/hiera.yaml
+      ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
+    fi
+    echo "Done"
+
     ;;
   node)
     echo "$HOSTS" >> /etc/hosts
